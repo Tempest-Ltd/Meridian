@@ -1,0 +1,184 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+  --background: #fbfaf7;
+  --surface: #f5f3ef;
+  --surface-elevated: #ffffff;
+  --foreground: #0a0a0a;
+  --muted: #f5f3ef;
+  --muted-foreground: #6b6b6b;
+  --border: #e7e5e4;
+  --input: #e7e5e4;
+  --ring: #1b2e24;
+  --primary: #1b2e24;
+  --primary-foreground: #fbfaf7;
+  --accent: #c9a227;
+  --accent-foreground: #0a0a0a;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+
+  color-scheme: light;
+}
+
+html {
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+html.dark,
+html.theme-dark,
+html.theme-forest {
+  color-scheme: dark;
+}
+
+  * {
+    border-color: var(--border);
+  }
+
+    html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--foreground);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .price {
+    font-family: var(--font-mono), monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+/* Clerk UserButton popover — theme-aware overrides */
+html[data-theme="dark"] [class*="cl-userButtonPopover"],
+html[data-theme="forest"] [class*="cl-userButtonPopover"] {
+  color: #f5f5f4 !important;
+}
+
+html[data-theme="dark"] [class*="cl-userButtonPopoverCard"],
+html[data-theme="forest"] [class*="cl-userButtonPopoverCard"] {
+  background-color: #1c1c1e !important;
+  border: 1px solid #27272a !important;
+}
+
+html[data-theme="dark"] [class*="cl-userButtonPopoverActionButton"],
+html[data-theme="forest"] [class*="cl-userButtonPopoverActionButton"] {
+  color: #f5f5f4 !important;
+}
+
+html[data-theme="dark"] [class*="cl-userButtonPopoverActionButton"]:hover,
+html[data-theme="forest"] [class*="cl-userButtonPopoverActionButton"]:hover {
+  background-color: #27272a !important;
+}
+
+html[data-theme="dark"] [class*="cl-userPreview"],
+html[data-theme="forest"] [class*="cl-userPreview"] {
+  color: #f5f5f4 !important;
+}
+
+html[data-theme="dark"] [class*="cl-userPreview"] [class*="Identifier"],
+html[data-theme="forest"] [class*="cl-userPreview"] [class*="Identifier"] {
+  color: #f5f5f4 !important;
+}
+
+html[data-theme="dark"] [class*="cl-userPreview"] [class*="Secondary"],
+html[data-theme="forest"] [class*="cl-userPreview"] [class*="Secondary"] {
+  color: #a1a1aa !important;
+}
+
+html[data-theme="dark"] [class*="cl-userButtonPopoverFooter"],
+html[data-theme="forest"] [class*="cl-userButtonPopoverFooter"] {
+  background-color: #141414 !important;
+  border-top: 1px solid #27272a !important;
+  color: #a1a1aa !important;
+}
+
+html[data-theme="dark"] [class*="cl-userButtonPopoverFooter"] *,
+html[data-theme="forest"] [class*="cl-userButtonPopoverFooter"] * {
+  color: #a1a1aa !important;
+}
+
+/* Any Clerk heading, paragraph, or span inside the popover */
+html[data-theme="dark"] [class*="cl-userButtonPopover"] p,
+html[data-theme="dark"] [class*="cl-userButtonPopover"] span,
+html[data-theme="dark"] [class*="cl-userButtonPopover"] a,
+html[data-theme="forest"] [class*="cl-userButtonPopover"] p,
+html[data-theme="forest"] [class*="cl-userButtonPopover"] span,
+html[data-theme="forest"] [class*="cl-userButtonPopover"] a {
+  color: #f5f5f4 !important;
+}
+
+/* SVG icons */
+html[data-theme="dark"] [class*="cl-userButtonPopover"] svg,
+html[data-theme="forest"] [class*="cl-userButtonPopover"] svg {
+  color: #a1a1aa !important;
+}

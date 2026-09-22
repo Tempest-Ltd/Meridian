@@ -1,0 +1,280 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum ProductBadge {
+  BEST_SELLER
+  NEW
+  SALE
+  POPULAR
+}
+
+model User {
+  id               String   @id @default(cuid())
+  clerkId          String   @unique
+  email            String   @unique
+  name             String?
+  imageUrl         String?
+  notificationPrefs Json?
+  role             Role     @default(USER)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  orders           Order[]
+  cartItems        CartItem[]
+  wishlistItems    WishlistItem[]
+  addresses        Address[]
+  reviews          Review[]
+  notifications    Notification[]
+  paymentMethods   PaymentMethod[]
+  contactMessages  ContactMessage[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  description  String
+  price        Decimal       @db.Decimal(10, 2)
+  comparePrice Decimal?      @db.Decimal(10, 2)
+  images       String[]
+  stock        Int           @default(0)
+  badge        ProductBadge?
+  rating       Float         @default(0)
+  reviewCount  Int           @default(0)
+  brand        String?
+  colors       Json?
+  featured     Boolean       @default(false)
+  published    Boolean       @default(true)
+  categoryId   String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  reviews    Review[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+  wishlist   WishlistItem[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([featured])
+  @@map("products")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String
+  status          OrderStatus @default(PENDING)
+  subtotal        Decimal     @db.Decimal(10, 2)
+  shipping        Decimal     @db.Decimal(10, 2) @default(0)
+  tax             Decimal     @db.Decimal(10, 2) @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+  stripeSessionId String?     @unique
+  stripePaymentId String?
+  email           String
+  shippingAddress Json
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  name      String
+  image     String
+  price     Decimal @db.Decimal(10, 2)
+  quantity  Int
+  color     String?
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int      @default(1)
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  rating    Int
+  title     String?
+  comment   String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("reviews")
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  label      String   @default("Home")
+  fullName   String
+  phone      String
+  street     String
+  city       String
+  state      String?
+  postalCode String
+  country    String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("notifications")
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscribers")
+}
+
+model StoreSettings {
+  id              String   @id @default("singleton")
+  name            String   @default("Meridian")
+  url             String?  @default("https://meridian.com")
+  email           String?  @default("support@meridian.com")
+  logoUrl         String?
+  timezone        String   @default("Africa/Lagos")
+  language        String   @default("en")
+  currency        String   @default("USD")
+  storeStatus     String   @default("LIVE")
+  maintenanceMode Boolean  @default(false)
+  defaultCountry  String   @default("NG")
+  dateFormat      String   @default("MMM d, yyyy")
+  theme           String   @default("light")
+  primaryColor    String   @default("#1b2e24")
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}
+
+model PaymentMethod {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  brand     String
+  last4     String
+  expMonth  Int
+  expYear   Int
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("payment_methods")
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("contact_messages")
+}
