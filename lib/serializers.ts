@@ -1,47 +1,38 @@
-import type {
-  Product as PrismaProduct,
-  Category as PrismaCategory,
-} from "@prisma/client";
-import type { Product, Category, ProductBadge } from "@/types";
+import type { Product as PrismaProduct, Category as PrismaCategory } from "@prisma/client";
+import type { Product, Category } from "@/types";
 
-type ProductWithCategory = PrismaProduct & { category: PrismaCategory };
-
-const BADGE_MAP: Record<string, ProductBadge> = {
-  BEST_SELLER: "best-seller",
-  NEW: "new",
-  SALE: "sale",
-  POPULAR: "popular",
-};
-
-export function serializeProduct(p: ProductWithCategory): Product {
+export function serializeProduct(
+  product: PrismaProduct & { category?: PrismaCategory | null }
+): Product {
   return {
-    id: p.id,
-    name: p.name,
-    slug: p.slug,
-    category: p.category.name,
-    categorySlug: p.category.slug,
-    brand: p.brand ?? undefined,
-    description: p.description,
-    price: Number(p.price),
-    comparePrice: p.comparePrice ? Number(p.comparePrice) : undefined,
-    images: p.images,
-    rating: p.rating,
-    reviewCount: p.reviewCount,
-    stock: p.stock,
-    badge: p.badge ? BADGE_MAP[p.badge] : undefined,
-    colors: (p.colors as { name: string; hex: string }[] | null) ?? undefined,
-    createdAt: p.createdAt.toISOString(),
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    price: Number(product.price),
+    comparePrice:
+      product.comparePrice != null ? Number(product.comparePrice) : undefined,
+    images: product.images,
+    stock: product.stock,
+    rating: product.rating,
+    reviewCount: product.reviewCount,
+    brand: product.brand ?? undefined,
+    colors: (product.colors as Product["colors"]) ?? undefined,
+    category: product.category?.name ?? "",
+    categorySlug: product.category?.slug ?? "",
+    badge: product.badge ?? undefined,
+    createdAt: product.createdAt.toISOString(),
   };
 }
 
 export function serializeCategory(
-  c: PrismaCategory & { _count?: { products: number } }
-): Category {
+  category: PrismaCategory & { _count?: { products: number } }
+): Category & { count?: number } {
   return {
-    id: c.id,
-    name: c.name,
-    slug: c.slug,
-    image: c.image ?? "",
-    count: c._count?.products,
+    id: category.id,
+    name: category.name,
+    slug: category.slug,
+    image: category.image ?? "",
+    count: category._count?.products,
   };
 }

@@ -16,12 +16,13 @@ export default async function NotificationsPage() {
     take: 50,
   });
 
-  const prefs = (user.notificationPrefs as Record<string, boolean>) ?? {
-    orderUpdates: true,
-    promotions: true,
-    accountActivity: true,
-    productUpdates: true,
-    marketingEmails: false,
+  const rawPrefs = user.notificationPrefs as Record<string, boolean> | null;
+  const prefs = {
+    orderUpdates: rawPrefs?.orderUpdates ?? true,
+    promotions: rawPrefs?.promotions ?? true,
+    accountActivity: rawPrefs?.accountActivity ?? true,
+    productUpdates: rawPrefs?.productUpdates ?? true,
+    marketingEmails: rawPrefs?.marketingEmails ?? false,
   };
 
   return (
@@ -43,7 +44,7 @@ export default async function NotificationsPage() {
         initialNotifications={notifications.map((n) => ({
           id: n.id,
           title: n.title,
-          body: n.body,
+          body: n.message,
           type: n.type,
           read: n.read,
           createdAt: n.createdAt.toISOString(),

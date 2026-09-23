@@ -295,7 +295,7 @@ interface ProductInput {
   categoryId: string;
   images: string[];
   stock: number;
-  badge?: "best-seller" | "new" | "sale" | "popular" | null;
+  badge?: "BEST_SELLER" | "NEW" | "SALE" | "POPULAR" | null;
   colors?: { name: string; hex: string }[];
   brand?: string | null;
   rating?: number;

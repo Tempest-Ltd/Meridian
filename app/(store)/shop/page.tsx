@@ -34,19 +34,11 @@ export default async function ShopPage({
         products={products}
         categories={categories}
         initialFilters={{
-          category: searchParams.category,
-          minPrice: searchParams.minPrice
-            ? Number(searchParams.minPrice)
-            : undefined,
-          maxPrice: searchParams.maxPrice
-            ? Number(searchParams.maxPrice)
-            : undefined,
-          rating: searchParams.rating
-            ? Number(searchParams.rating)
-            : undefined,
+          category: searchParams.category ?? "",
+          priceRanges: [],
+          rating: searchParams.rating ? Number(searchParams.rating) : 0,
           inStock: searchParams.inStock === "1",
-          q: searchParams.q,
-          sort: searchParams.sort,
+          q: searchParams.q ?? "",
         }}
       />
     </div>

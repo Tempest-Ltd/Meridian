@@ -67,7 +67,7 @@ export async function updateStoreSettings(
 ): Promise<StoreSettingsData> {
   const updated = await prisma.storeSettings.upsert({
     where: { id: "singleton" },
-    create: { id: "singleton", ...DEFAULTS, ...data },
+    create: { ...DEFAULTS, ...data },
     update: data,
   });
 
