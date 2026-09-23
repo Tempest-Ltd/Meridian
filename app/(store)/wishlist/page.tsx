@@ -1,5 +1,8 @@
 "use client";
 
+
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { Heart, ArrowRight } from "lucide-react";
 import { ProductCard } from "@/components/store/product/product-card";

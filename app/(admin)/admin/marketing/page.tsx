@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Target, DollarSign, TrendingUp, Users, ArrowUp, ArrowRight } from "lucide-react";
 import { PerformanceTrend } from "@/components/admin/marketing/performance-trend";
 import { TrafficSources } from "@/components/admin/marketing/traffic-sources";
