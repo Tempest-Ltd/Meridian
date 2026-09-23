@@ -2,7 +2,19 @@
 
 A production-grade, full-stack e-commerce platform built with Next.js 14, Prisma, and Stripe. Meridian ships as a single codebase containing two distinct applications: a customer-facing storefront and an owner-facing admin dashboard.
 
-[Report Bug](../../issues) · [Request Feature](../../issues)
+[Live Demo](https://meridian-six-pi.vercel.app) · [Report Bug](../../issues) · [Request Feature](../../issues)
+
+---
+
+## Preview
+
+![Meridian homepage](docs/home.png)
+
+![Shop with filters](docs/shop.png)
+
+![Product detail page](docs/product.png)
+
+![Admin dashboard](docs/admin.png)
 
 ---
 
