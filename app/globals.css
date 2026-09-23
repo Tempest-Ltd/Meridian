@@ -182,3 +182,14 @@ html[data-theme="dark"] [class*="cl-userButtonPopover"] svg,
 html[data-theme="forest"] [class*="cl-userButtonPopover"] svg {
   color: #a1a1aa !important;
 }
+/* Constrain Clerk UserButton popover for mobile */
+.cl-userButtonPopoverCard {
+  width: 260px !important;
+  max-width: calc(100vw - 24px) !important;
+}
+
+@media (max-width: 640px) {
+  .cl-userButtonPopoverCard {
+    width: 240px !important;
+  }
+}

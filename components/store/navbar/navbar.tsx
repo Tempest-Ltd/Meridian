@@ -33,6 +33,22 @@ interface Category {
   image: string | null;
 }
 
+const USER_BUTTON_APPEARANCE = {
+  elements: {
+    avatarBox:
+      "h-9 w-9 ring-1 ring-border transition-all hover:ring-[#1b2e24]",
+    userButtonPopoverCard:
+      "shadow-xl border border-border rounded-xl overflow-hidden",
+    userButtonPopoverMain: "text-sm",
+    userButtonPopoverActions: "p-1",
+    userButtonPopoverActionButton:
+      "px-3 py-2 rounded-md text-xs hover:bg-[#f5f3ef]",
+    userButtonPopoverActionButtonText: "text-xs font-medium",
+    userButtonPopoverActionButtonIcon: "h-3.5 w-3.5",
+    userButtonPopoverFooter: "hidden",
+  },
+} as const;
+
 export function Navbar({ categories }: { categories: Category[] }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -193,6 +209,7 @@ export function Navbar({ categories }: { categories: Category[] }) {
           })}
         </nav>
 
+        {/* Desktop controls */}
         <div className="hidden flex-1 items-center justify-end gap-1 lg:flex">
           <SearchBar className="mr-3 w-[260px]" />
           <div className="flex items-center gap-1">
@@ -208,12 +225,7 @@ export function Navbar({ categories }: { categories: Category[] }) {
             <SignedIn>
               <UserButton
                 afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    avatarBox:
-                      "h-9 w-9 ring-1 ring-border transition-all hover:ring-[#1b2e24]",
-                  },
-                }}
+                appearance={USER_BUTTON_APPEARANCE}
               >
                 <UserButton.MenuItems>
                   <UserButton.Link
@@ -266,8 +278,10 @@ export function Navbar({ categories }: { categories: Category[] }) {
           </div>
         </div>
 
+        {/* Mobile controls */}
         <div className="ml-auto flex items-center gap-1 lg:hidden">
           <SearchBar className="hidden max-w-[180px] sm:flex" />
+
           {isAdmin && (
             <Link
               href="/admin"
@@ -277,7 +291,46 @@ export function Navbar({ categories }: { categories: Category[] }) {
               <LayoutDashboard className="h-4 w-4" />
             </Link>
           )}
+
+          <SignedIn>
+            <UserButton
+              afterSignOutUrl="/"
+              appearance={USER_BUTTON_APPEARANCE}
+            >
+              <UserButton.MenuItems>
+                <UserButton.Link
+                  label="My Account"
+                  labelIcon={<User className="h-4 w-4" />}
+                  href="/account"
+                />
+                <UserButton.Link
+                  label="Order History"
+                  labelIcon={<Heart className="h-4 w-4" />}
+                  href="/account/orders"
+                />
+                <UserButton.Link
+                  label="Wishlist"
+                  labelIcon={<Heart className="h-4 w-4" />}
+                  href="/wishlist"
+                />
+                <UserButton.Action label="manageAccount" />
+                <UserButton.Action label="signOut" />
+              </UserButton.MenuItems>
+            </UserButton>
+          </SignedIn>
+
+          <SignedOut>
+            <Link
+              href="/sign-in"
+              className="flex h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-surface"
+              aria-label="Sign in"
+            >
+              <User className="h-5 w-5" />
+            </Link>
+          </SignedOut>
+
           <CartIcon />
+
           <button
             type="button"
             onClick={() => setMobileOpen((v) => !v)}
