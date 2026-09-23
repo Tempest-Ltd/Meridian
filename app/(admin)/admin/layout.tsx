@@ -3,6 +3,8 @@ import { unstable_noStore as noStore } from "next/cache";
 import { AdminShell } from "@/components/admin/layout/admin-shell";
 import { getCurrentUser } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({
   children,
 }: {

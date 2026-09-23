@@ -3,6 +3,8 @@ import { AccountSidebar } from "@/components/store/account/account-sidebar";
 import { AccountMobileNav } from "@/components/store/account/account-mobile-nav";
 import { getCurrentUser } from "@/lib/auth";
 
+export const dynamic = "force-dynamic";
+
 export default async function AccountLayout({
   children,
 }: {
