@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getProductBySlug } from "@/lib/queries/products";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   _req: Request,
   { params }: { params: { slug: string } }

@@ -3,6 +3,8 @@ import { z } from "zod";
 import { getCurrentUser } from "@/lib/auth";
 import { removeCartItem, updateCartItem } from "@/lib/queries/cart";
 
+export const dynamic = "force-dynamic";
+
 const PatchSchema = z.object({
   quantity: z.number().int().min(0).max(99),
 });

@@ -6,6 +6,8 @@ import { prisma } from "@/lib/prisma";
 import { createOrder, getOrderBySessionId } from "@/lib/queries/orders";
 import { OrderConfirmation } from "@/emails/order-confirmation";
 
+export const dynamic = "force-dynamic";
+
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
 export async function POST(req: Request) {
